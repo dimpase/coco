@@ -13,11 +13,11 @@
 #include "common.h"
 #include "readstr.h"
 
-#define BMAX 15
-#define twopow 256
-#define RMAX twopow-1
-#define NSMAX 8000
-#define NSUBMAX 500
+#define BMAX 100  /* max number of blocks (orbits in Schurean case) */
+#define twopow 2048 
+#define RMAX twopow-1 /* maximal rank */
+#define NSMAX 20000
+#define NSUBMAX 5000
 #define LEXT 16000
 
 
@@ -289,7 +289,7 @@ static void inset(k, s)
 	longjmp(jb, 1);
     }
     if (p + k >= ep) {
-   if ((p = (unsigned int *) getmem(LEXT, 1)) == NULL) {
+   if ((p = (unsigned int *) getmem(LEXT, sizeof(unsigned int))) == NULL) {
 	    prt(3, "not enough space for good sets\n");
 	    longjmp(jb, 1);
 	}
@@ -318,7 +318,7 @@ static void insub(r, k, s)
 	longjmp(jb, 1);
     }
     if (p1 + k >= ep1) {
-	if ((p1 = (unsigned int *) getmem(LEXT, 1)) == NULL) {
+	if ((p1 = (unsigned int *) getmem(LEXT, sizeof(unsigned int))) == NULL) {
 	    prt(3, "not enough space for subschemes\n");
 	    longjmp(jb, 1);
 	}
