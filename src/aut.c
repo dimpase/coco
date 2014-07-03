@@ -940,10 +940,6 @@ static void openf(na, pa, n, r, beg)
     prt(3, "\n");
     lseek(fic, 0l, SEEK_SET);
     read0(fic, (char *) &mode, sizeof(mode));
-    if (mode != 1) {
-	prt(3, "incorrect mode\n");
-	longjmp(jb, 1);
-    }
     read0(fic, (char *) &b, sizeof(b));
     if (b == 0 || b > NOMAX) {
 	prt(3, "incorrect number of blocks\n");
