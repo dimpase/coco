@@ -16,7 +16,7 @@
 #define BMAX 15
 #define twopow 256
 #define RMAX twopow-1
-#define NSMAX 1000
+#define NSMAX 8000
 #define NSUBMAX 500
 #define LEXT 16000
 
