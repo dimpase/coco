@@ -1,0 +1,5 @@
+The program crein is not called by coco.
+It gets the matrices of some scheme edited into the source
+and then computes eigenvalues, multiplicities, Krein
+parameters etc.
+Each time it waits, hit return.

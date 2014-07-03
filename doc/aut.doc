@@ -1,0 +1,15 @@
+The command `aut' determines the group of automorphisms
+of a given colour graph after merging certain classes.
+
+Call of aut:
+	aut if.cgr if.sub
+
+The input file if.cgr is a binary file produced by the
+command `cgr'.
+
+Format of if.sub: zero or more lines of the form
+(x0,x1,...,xn)(y0,y1,...)...
+indicating that classes x0,...,xn are to be merged, etc.
+In particular, an empty line indicates no mergings.
+Input is ended by a line containing a single `.' or
+by end-of-file (^D).

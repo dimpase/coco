@@ -1,0 +1,113 @@
+
+*** system CO-CO for construction of coherent configurations ***
+
+output listing to file coco.res
+
+COCO>> ind l34 example.ind xx
+
+* induced action of permutation group on structure *
+
+input of group from /home/svin07b/aeb/coco/gen/l34.gen
+input of structure for inducing from example.ind.str
+output of induced group to file xx.gen
+
+length of orbit 1 is 105
+
+induced transitive group on 105 points
+
+COCO>> cgr xx example.cgr xx
+
+* construction of 2-orbits of permutation group *
+
+input of group from xx.gen
+input of options from example.cgr.opt
+output of colour graph to file xx.cgr
+
+orbit 1 has length 105
+
+stabilizer of point 0 of orbit 1 has
+   6 suborbits on orbit 1
+     number  length   representative
+        0        1           0
+        1       16           1
+        2       64           2
+        3       16           5
+        4        4          43
+        5        4          57
+colour graph is saved
+
+reflexive suborbits:0
+symmetrical suborbits:2,4,5
+pairs of antisymmetrical suborbits:(1,3)
+
+
+COCO>> inm xx example.inm xx
+
+* calculation of intersection numbers *
+
+input of colour graph from file xx.cgr
+input of options from example.inm.opt
+output of intersection numbers to file xx.nrs
+
+homogeneous colour graph of rank 6 on 105 vertices
+
+there are 69 nonzero intersection numbers with i of type 1,1
+
+COCO>> sub xx example.sub xx
+
+* construction of subconfigurations *
+
+input of intersection numbers from xx.nrs
+input of options from example.sub.opt
+output of subconfigurations to file xx.sub
+
+disconnected classes: 4,5
+imprimitive scheme of rank 6
+
+there exist 5 good symmetrical sets
+there exist 0 pairs of good antisymmetrical sets
+1. subscheme of rank 4 by merging (1,3)(4,5)
+2. subscheme of rank 3 with parameters (105,32,4) by merging (1,3)(2,4,5)
+3. subscheme of rank 3 with parameters (105,4,3) by merging (1,3,2,4)
+4. subscheme of rank 3 with parameters (105,4,3) by merging (1,3,2,5)
+
+4 subschemes
+
+COCO>> aut xx xx
+
+* calculation of automorphism groups *
+
+input of colour graph from file xx.cgr
+input of mergings from xx.sub
+
+homogeneous colour graph of rank 6 on 105 vertices
+
+colour graph of rank 6
+transitive automorphism group of order 120960
+rank=6; subdegrees:1,16,64,16,4,4
+base of length 5, 6 generators
+
+colour graph of rank 4
+transitive automorphism group of order 241920
+rank=4; subdegrees:1,32,64,8
+base of length 5, 7 generators
+
+colour graph of rank 3
+transitive automorphism group of order 241920
+rank=4; subdegrees:1,32,64,8
+base of length 5, 7 generators
+
+colour graph of rank 3
+transitive automorphism group of order 5349217270497280000000000000000000000000
+rank=3; subdegrees:1,100,4
+base of length 84, 92 generators
+
+colour graph of rank 3
+transitive automorphism group of order 5349217270497280000000000000000000000000
+rank=3; subdegrees:1,100,4
+base of length 84, 92 generators
+
+
+COCO>> end
+
+* end of CO-CO *

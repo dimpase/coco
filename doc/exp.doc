@@ -1,0 +1,9 @@
+The command `exp' computes the wreath product of its two
+input groups. (Thus, if the input groups have degree
+d1 and d2, then the output group has degree d1^d2.)
+
+Call of exp:
+	exp igp1.gen igp2.gen ogp.gen
+
+For the format of the input and output files, see the
+description of the `cgr' command.

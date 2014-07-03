@@ -1,0 +1,46 @@
+coco - compute with coherent configurations
+Author: I.A. Faradzev (in cooperation with M.H. Klin).
+Unix port: A.E. Brouwer (aeb@cwi.nl)
+
+Invocation:
+	coco
+or
+	coco of
+calls coco and sends the protocol to the listing file of (default coco.res).
+During a run the listing file can be changed with the `new' command.
+
+Help: the coco command `?' prints this file. For any coco command xxx, the
+command `xxx?' prints the file xxx.doc with information on the command xxx.
+
+Commands: coco recognizes the 7 commands
+	aut, cgr, cosen, exp, ind, inm, sub.
+These commands usually have some parameters indicating input and output files.
+A trailing ! after a filename orders coco to list the contents of the
+input file while reading it.
+A single * as input file name tells coco to get its input from stdin,
+usually the keyboard.
+The input and output files have default extensions indicated by
+    cosen      ind       cgr       inm       sub
+.rep  ->  .gen  ->  .gen  ->  .cgr  ->  .nrs  ->  .sub
+
+           exp                            aut
+.gen, .gen  ->  .gen          .cgr, .sub  ->  *
+For further information, see the documentation of the individual commands.
+
+A run is terminated by typing the ^D character or by giving the `end' command.
+
+Auxiliary commands: coco recognizes the 7 requests (auxiliary commands)
+	, end, help, look, more, new, res.
+The empty request does not do anything.
+The request `help' is a synonym for `?'.
+The request `more' runs a pager (currently "/usr/ucb/more") with
+the arguments provided.
+The request `look' is equivalent to `more of', where of is the
+most recently produced output file.
+The request `res' is equivalent to `more of', where of is the
+current listing file.
+
+If the environment variable COCO is defined then input files g.gen, r.rep and
+s.str will be looked for in $COCO/gen, $COCO/rep and $COCO/str, respectively,
+when not found in the present directory. Similarly, the executables and
+help files are looked for in $COCO/bin and $COCO/doc.

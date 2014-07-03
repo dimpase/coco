@@ -1,0 +1,51 @@
+The command `cgr' computes the colour graph for a given
+permutation group.
+
+Call of cgr:
+	cgr g.gen options c.cgr
+
+Here g.gen is an input file containing generators for the group G,
+and c.cgr is an output file where the colour graph is written.
+This output file is not for human consumption, but can be used
+by the commands `aut' and `inm'.
+
+The input file g.gen has the following format:
+The first line gives the degree n, the second line gives the number
+of generators r and the following r lines contain the generators.
+The generators are in cycle form, with cycles of length 1 omitted.
+Although there is no limit on (physical) input line length, a logical
+line may be continued over more than one physical line by ending each
+non-final part with `*'.
+Restrictions: the entries are the numbers 0..(n-1); the orbits of the
+group must be consecutive subintervals of this interval.
+Example: the input
+	5
+	2
+	(0,1,2,3,4)
+	(0,1)
+describes the symmetric group Sym(5) in its natural action.
+
+The file options (usually a * will be given and the options read
+from stdin) may contain:
+		G transitive	G not transitive
+no c.cgr given	o,rank		o,t,d,ot,od,list or ranks
+c.cgr given	i,rank		t,d,list or ranks
+
+o	The option "o" specifies that all suborbits should be listed
+	explicitly; without the "o" option only the length and one
+	representative is given.
+i	The option "i" tells to output enough columns for `inm' to work
+	(this works only if G is transitive); this yields a much smaller
+	output file, which cannot be used by `aut'.
+t	The option "t" ("triangular") selects only the pairs of blocks
+	(i,j) with i<=j.
+d	The option "d" ("diagonal") selects only the pairs of blocks (i,i).
+In case you know the rank(s) of the representation, you may
+specify them - it will speed up computations.
+There are two allowed ways of specifying:
+Either b lines, each a sequence of b ranks separated by comma's;
+a 0 means that the corresponding block can be omitted.
+Or a list of blocks: lines of the form
+	(n1-m1[r1],m2[r2],...,mk[rk])
+where n1 is the block number of the row, the mj are the block
+numbers of the columns, and the (optional) rj gives the rank.

@@ -1,0 +1,14 @@
+Heiko Theissen and Dima Pasechnik contributed some remarks
+about the installation. COCO 1.0 compiled cleanly under SunOS,
+but COCO 1.1 now also compiles on a Linux PC (i.e., with GNU tools).
+In version 1.2 a bug concerning the writing of big generators
+was fixed. Version 1.2a compiles on a recent Linux system.
+
+coco assumes that you have an environment variable COCO
+set to the full path of the COCO directory.
+
+"make install" will move the driver program coco to your
+bin directory $HOME/bin.
+
+Heiko Theissen contributed the representation of J2 on 10080
+points, constructed by Alexander Hulpke.

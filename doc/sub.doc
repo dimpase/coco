@@ -1,0 +1,34 @@
+The command `sub' determines the subschemes (merged schemes,
+fusion schemes) of a given scheme (given by its parameters, that is).
+It tells what relations to merge, what the rank of the resulting
+scheme is, and, in case that is 3, also the parameters (v,k,lam).
+Its output can be used as input to the `aut' command.
+
+Call of sub:
+	sub if.nrs o.opt of.sub
+
+The intersection number input has the format
+b			(the number of diagonal classes X_i)
+r_11,r_12,...,r_bb	(the numbers of orbits on X_i x X_j)
+(s,s')(t,t')...		(the pairs of classes that are transposes)
+nr_11			(the number of nonzero p_ijk with i in X_1 x X_1)
+(i,j,k-p_ijk)...	(this number of values)
+nr_12			(the number of nonzero p_ijk with i in X_1 x X_2)
+...
+nr_bb
+(i,j,k-p_ijk)...
+
+[Here p_ijk stands for {p_ij}^k.]
+
+The option input is one of "","s","a","p","sp","ap".
+An "a" requires the merging to be antisymmetric
+(which is possible only if there are no nondiagonal symmetric
+classes to start with).
+A "s" requires the merging to be symmetric.
+A "p" requires the merging to be primitive
+(which is possible only if either it was primitive already,
+or it had more than one diagonal class).
+
+For the format of the output file of.sub, see the description
+of the `aut' command.
+Subconfigurations are given in order of decreasing rank.

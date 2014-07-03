@@ -1,0 +1,25 @@
+The command `inm' calculates the intersection numbers of a given
+colour graph.
+
+Call of inm:
+	inm if.cgr options.opt of.nrs
+
+The input file if.cgr is a binary file produced by the
+command `cgr'.
+
+The option input is used only when the number of orbits (diagonal
+blocks) of if.cgr is larger than 1; in that case it specifies
+the set of triples (n1,n2,n3) of three diagonal blocks for
+which the corresponding p(i,j,k) have to be computed.
+It is either empty: all triples,
+or "ndg" (`not on diagonal'): all triples except for (m,m,m),
+or "nrf" (`no repeated field'): all triples except for
+  (m,m,l), (m,l,m), (l,m,m),
+or an explicit list "(m1,m2,m3)(n1,n2,n3)...".
+
+For the format of the output file of.nrs, see the description
+of the `sub' command.
+
+If of.nrs is followed by `!' then the intersection numbers
+are sorted according to (i,j,k) and also given on stdout;
+this applies even if of.nrs itself was omitted.

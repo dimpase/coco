@@ -1,0 +1,88 @@
+                       The COSEN Command
+                       =================
+                        
+This command can produce the enumeration of the cosets of the
+subgroup H=<h(1),...,h(k)> in the group G=<x1,...,xN|w(1),...,w(r)>,
+where h(i) and w(i) are words in the alphabet x1,...,xN.
+If the enumeration is successful then this command shows [G:H] and
+can produce the permutation representation of G on the set of cosets of H.
+
+    Format of the command COSEN
+----------------------------------------------------------
+cosen f1 f2 f3
+  Here f1 means input file, f2 in the present version must equal
+  * (if f3 is nonempty), f3 is the file that will contain the
+  permutation representation of G on the set of cosets of H in G
+  (if the enumeration is successful).
+  The default extensions for f1 and f3 are .rep and .gen, respectively.
+
+
+    Format of the input file:
+----------------------------------------------------------
+Number of the generators (i.e. N)
+Number of the involutorial generators (Ninv)
+Number k of the words h(i), which generate the subgroup H
+h(1)
+h(2)
+...
+...
+h(i)
+...
+h(k)
+Number r of the defining relations w(i)
+w(1)
+...
+...
+w(i)
+...
+w(r)
+
+       How to write down the relations w(i) and the words h(i).
+       --------------------------------------------------------
+       
+Each w(i) or h(i) is a word in the alphabet x1,...,xN. Each
+letter xJ in this alphabet must be written just as J.
+Each letter is a word.
+Each word is a sequence of words. A (nontrivial) sequence of words is
+(word1)D1,(word2)D2,...,(wordM)DM, where (wordI)DI::=wordI,...,wordI
+repeated DI times. If DI=1 then it is possible to write just
+wordI instead of (wordI)1.
+Note that the DI are concrete numbers, not variables.
+
+           About involutorial and noninvolutorial generators
+           -------------------------------------------------
+It is assumed that the first Ninv generators are involutorial.
+For such generator xI the relation (xI)2 is redundant.
+
+                               An example
+                               ----------
+The input file a5.rep for the enumeration of the cosets of a subgroup
+H=Sym(3) in the group G=Alt(5) follows. For other
+examples see the files *.rep.
+
+3           the number of generators G=<x1,x2,x3>
+3           the number of the involutorial ones  xI*xI=1
+2           the number of words, which generate the subgroup.
+1           H=<x1,x2>
+2           ...
+4           the number of defining relations
+(1,2)3      relations
+(1,3)2      ...
+(2,3)5      ...
+(1,2,3)5    ...
+
+If you type
+
+cosen a5.rep
+
+you will obtain [G:H]=10.
+   
+   
+If you type
+
+cosen a5.rep * tmp.gen
+
+you will obtain also the file tmp.gen containing a permutation
+representation of Alt(5) on the cosets of Sym(3).
+
+           

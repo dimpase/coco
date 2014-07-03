@@ -1,0 +1,53 @@
+The command `ind' computes the permutation group induced on a
+given structure by a given permutation group. For example, giving
+the structure {0,1} will yield the permutation representation on
+unordered pairs, and (in a suitable representations of PSL(3,2))
+giving the structure (0,{0,1,3}) will yield the permutation
+representation on flags, i.e., on incident point-linr pairs.
+
+Call of ind:
+	ind g.gen s.str indg.gen m.map
+
+Here g.gen and s.str are input files containing generators
+for the group and a description of the structure;
+indg.gen and m.map are output files where generators for the
+induced group and the mapping are stored.
+The last two arguments are optional.
+
+Description of structures:
+Structure:	s1/s2/.../sr
+	where r > 0 and each si is either a sequence, a set,
+	a cycle or a dset, optionally followed by an integer
+	indicating (an upper bound for) the length of its orbit.
+Sequence:	(s1,...,sr)
+	where r >= 0 and each si is either a sequence, a set,
+	a cycle or an element, i.e., an integer in the range
+	0..(n-1), if n is the degree of the permutation group.
+Set:		{s1,...,sr}
+	where r >= 0 and each si is either a sequence, a set,
+	a cycle or an element, and all members have the same
+	structure - that is, upon removing all elements (i.e.,
+	all digits not between [ and ]) from each member, the
+	resulting strings are identical.
+Dset:		"{s1,...,sr}m"
+	where m is empty or an integer indicating (an upper bound
+	for) the length of the orbit of s1, r >= 0 and each si
+	is either a sequence, a set or a cycle, and all si are in
+	one orbit - in particular they must all have the same
+	structure (as was required for sets).
+Cycle:		C(n1,...,nr)[u1,...,um]
+	where r > 1, ni in 0..(n-1), m > 0, uj in 1..(r-1).
+
+The meaning of sequence and set is clear. A dset has the same
+semantics as the set obtained by deleting the quotes, but for
+a dset the inducing is done in two stages: first on its first
+member and then for the entire set.
+The cycle C(n1,...,nr)[u1,...,um] stands for the set of cyclic
+shifts of (n1,...,nr), possibly rearranged by going around the
+cycle in steps of uj instead of 1. Restriction: {1,u1,...,um}
+must be a multiplicative subgroup of the integers modulo r.
+
+Description of map output file: this is a list of lines
+	i.si
+where i is the number of the new point, and si is the structure
+it corresponds to in terms of the old elements.
