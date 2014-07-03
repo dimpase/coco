@@ -4,7 +4,7 @@
 # SUN make doesn't like the GNU extensions. So, all dependencies
 # are written out in full here.
 
-CFLAGS=-O
+CFLAGS=-O -g
 ALL=aut cgr coco cosen crein exp ind inm sub
 OBJ=aut.o cgr.o coco.o common.o cosen.o exp.o ind.o ingp.o inm.o \
 	outgp.o readstr.o sub.o
@@ -14,36 +14,35 @@ all: $(ALL)
 $(OBJ): def.h
 
 coco: coco.o prt.o
-	$(CC) -o coco coco.o prt.o
+	$(CC) $(CFLAGS) -o coco coco.o prt.o
 
 aut: aut.o common.o readstr.o prt.o
-	$(CC) -o aut aut.o common.o readstr.o prt.o
+	$(CC) $(CFLAGS) -o aut aut.o common.o readstr.o prt.o
 
 cosen: cosen.o common.o readstr.o prt.o
-	$(CC) -o cosen cosen.o common.o readstr.o prt.o
+	$(CC) $(CFLAGS) -o cosen cosen.o common.o readstr.o prt.o
 
 sub: sub.o common.o readstr.o prt.o
-	$(CC) -o sub sub.o common.o readstr.o prt.o
+	$(CC) $(CFLAGS) -o sub sub.o common.o readstr.o prt.o
 
 cgr: cgr.o common.o ingp.o readstr.o prt.o
-	$(CC) -o cgr cgr.o common.o ingp.o readstr.o prt.o
+	$(CC) $(CFLAGS) -o cgr cgr.o common.o ingp.o readstr.o prt.o
 
 GGOBJ=common.o ingp.o outgp.o prt.o readstr.o
 exp: exp.o $(GGOBJ)
-	$(CC) -o exp exp.o $(GGOBJ)
+	$(CC) $(CFLAGS) -o exp exp.o $(GGOBJ)
 
 ind: ind.o $(GGOBJ)
-	$(CC) -o ind ind.o $(GGOBJ)
+	$(CC) $(CFLAGS) -o ind ind.o $(GGOBJ)
 
 INMOBJ=inm.o common.o outgp.o prt.o readstr.o
 inm: $(INMOBJ)
-	$(CC) -o inm $(INMOBJ)
+	$(CC) $(CFLAGS) -o inm $(INMOBJ)
 
 crein: crein.o
-	$(CC) -o crein crein.o -lm
+	$(CC) $(CFLAGS) -o crein crein.o -lm
 
 install: $(ALL)
-	strip $(ALL)
 	mv $(ALL) ../bin
 	mv ../bin/coco $(HOME)/bin
 
