@@ -14,11 +14,12 @@
 #include "readstr.h"
 
 #define BMAX 15
-#define RMAX 255
+#define twopow 256
+#define RMAX twopow-1
 #define NSMAX 1000
 #define NSUBMAX 500
-#define NEMAX 100
 #define LEXT 16000
+
 
 jmp_buf jb;
 struct file innrsf, inoptf, outsubf;
@@ -30,11 +31,11 @@ struct file innrsf, inoptf, outsubf;
 #define flos outsubf.isopen
 
 struct {
-    unsigned char k, *p;
+    unsigned int k, *p;
 } set[NSMAX];
 
 struct {
-    unsigned char r, k;
+    unsigned int r, k;
     unsigned int *p;
 } sub[NSUBMAX];
 
@@ -43,7 +44,7 @@ static int inpsym(b, r, ref, na, sym, poserr)
     int *sym;
 {
     unsigned int i, x, y, u[2];
-    char s;
+    int s;
 
     readstr(fic, flic);
     for (i = 0; i < r; i++)
@@ -113,7 +114,7 @@ static int inpmatr(b, r, rnk, beg, end, d, matr, rfm, n, poserr)
     unsigned int b, r, *rnk, *beg, *end, *d, *rfm[], *matr, *n, *poserr;
 {
     unsigned int i, x, y, u[3], *pm, b2, al, bt, gm, u0, u1, u2;
-    char s;
+    int s;
     long r2;
 
     readstr(fic, flic);
@@ -198,9 +199,9 @@ static int inpmatr(b, r, rnk, beg, end, d, matr, rfm, n, poserr)
 
 static int tprim(r, matr, l, set)
     unsigned int r, * matr, l;
-    unsigned char *set;
+    unsigned int *set;
 {
-    unsigned char orb[RMAX], v, w;
+    unsigned int orb[RMAX], v, w;
     unsigned int i, i1, j, k, m, * pi, * pj, * pk, s;
     long r2;
 
@@ -225,7 +226,7 @@ static int tprim(r, matr, l, set)
 static unsigned int prm(r, matr, prim)
     unsigned int r, *matr, *prim;
 {
-    unsigned char i, s;
+    unsigned int i, s;
 
     for (s = 0, i = 1; i < r; i++) {
 	prim[i] = tprim(r, matr, 1, &i);
@@ -252,7 +253,7 @@ static void listsym(r, sym, n, list)
 	if ((s = sym[i]) == i)
 	    list[(*n)++] = i;
 	if (s > i) {
-	    list[(*n)++] = i | 256;
+	    list[(*n)++] = i | twopow;
 	    list[(*n)++] = s;
 	}
     }
@@ -269,7 +270,7 @@ static void listasym(b, r, sym, n, list)
 	    list[(*n)++] = i;
 }
 
-unsigned char *p, *ep;
+unsigned int *p, *ep;
 int nset;
 
 static void setup()
@@ -281,14 +282,14 @@ static void setup()
 
 static void inset(k, s)
     unsigned int k;
-    unsigned char *s;
+    unsigned int *s;
 {
     if (nset + 1 == NSMAX) {
 	prt(3, "number of good sets is greater than %d\n", NSMAX);
 	longjmp(jb, 1);
     }
     if (p + k >= ep) {
-	if ((p = (unsigned char *) getmem(LEXT, 1)) == NULL) {
+   if ((p = (unsigned int *) getmem(LEXT, 1)) == NULL) {
 	    prt(3, "not enough space for good sets\n");
 	    longjmp(jb, 1);
 	}
@@ -296,7 +297,7 @@ static void inset(k, s)
     }
     set[nset].p = p;
     set[nset++].k = k;
-    bcopy((char *)s, (char *)p, (int)k * sizeof(*s));
+    bcopy((int *)s, (int *)p, (int)k * sizeof(*s));
     p += k;
 }
 
@@ -326,7 +327,7 @@ static void insub(r, k, s)
     sub[nsub].p = p1;
     sub[nsub].r = r;
     sub[nsub++].k = k;
-    bcopy((char *)s, (char *)p1, (int)k * sizeof(*s));
+    bcopy((int *)s, (int *)p1, (int)k * sizeof(*s));
     p1 += k;
 }
 
@@ -336,13 +337,13 @@ static void goodsets(mode, u, n, list, r, sym, matr, ns)
     int *sym;
 {
     unsigned int q, q1, ls, ls0, x, y, z, i, j, s, s0, *pm, *pm1, *pmm;
-    unsigned char set[RMAX], pr;
+    unsigned int set[RMAX], pr;
     int k, l;
     long r2, lambda, ss, ss0;
     struct {
 	unsigned int s0, s1;
-	unsigned char l, q, z, pr;
-	char k;
+	unsigned int l, q, z, pr;
+	int k;
     } lev[RMAX];
 
     r2 = r * r;
@@ -356,8 +357,8 @@ static void goodsets(mode, u, n, list, r, sym, matr, ns)
 	ls = lev[l].l;
 	pr = lev[l].pr;
 	z = lev[l].z;
-	for (q1 = q, x = 1; x; ls++, q++, x = y & 256) {
-	    set[ls] = (y = list[q]) & 255;
+        for (q1 = q, x = 1; x; ls++, q++, x = y & twopow) {
+            set[ls] = (y = list[q]) & (twopow-1);
 	    if (z)
 		set[ls] = sym[set[ls]];
 	}
@@ -423,9 +424,9 @@ static void goodsets(mode, u, n, list, r, sym, matr, ns)
 
 static int tprimrf(b, r, rnk, beg, end, d, rfm, l, set)
     unsigned int b, r, *rnk, *beg, *end, *d, * rfm[], l;
-    unsigned char *set;
+    unsigned int *set;
 {
-    unsigned char orb[RMAX], v, w;
+    unsigned int orb[RMAX], v, w;
     unsigned int i, i1, j, k, m, s, b2, al, bt, gm;
 
     for (i = 0; i < r; i++)
@@ -462,9 +463,9 @@ static void ordlist(no, n, list, r, rnk, beg, val, delta, c)
     unsigned int no, n, *list, r, *rnk, *beg, *val, *delta, *c;
 {
     unsigned int i, j, k, b, ne, l, v, x, y, list1[RMAX], rr[BMAX], c1[BMAX];
-    unsigned char s[RMAX];
+    unsigned int s[RMAX];
     struct {
-	unsigned char b, l, bg;
+	unsigned int b, l, bg;
 	unsigned int v;
     } el[RMAX];
 
@@ -484,12 +485,12 @@ static void ordlist(no, n, list, r, rnk, beg, val, delta, c)
     for (i = 0; i < no; i++)
 	c[c1[i]] = i;
     for (ne = i = 0; i < n; el[ne].l = l, el[ne++].v = v) {
-	for (k = BMAX, j = i, x = 1; x; x = y & 256, j++)
-	    if (k > (x = c[beg[(y = list[j]) & 255]]))
+	for (k = BMAX, j = i, x = 1; x; x = y & twopow, j++)
+	    if (k > (x = c[beg[(y = list[j]) & (twopow-1)]]))
 		k = x;
 	for (el[ne].b = i, el[ne].bg = k, l = v = 0, x = 1;
-	     x; x = y & 256, i++, l++)
-	    if (c[beg[x = (y = list[i]) & 255]] == k)
+	     x; x = y & twopow, i++, l++)
+	    if (c[beg[x = (y = list[i]) & (twopow-1)]] == k)
 		v += val[x];
     }
     for (i = 0; i < ne; i++)
@@ -508,8 +509,8 @@ static void ordlist(no, n, list, r, rnk, beg, val, delta, c)
 	delta[i] = 0;
     for (i = ne - 1; i > 0; i--)
 	if (el[x = s[i]].bg == el[y = s[i - 1]].bg)
-	    delta[list[el[y].b] & 255] = delta[list[el[x].b] & 255] + el[x].v;
-    bcopy((char *)list1, (char *)list, (int)n * sizeof(*list));
+	    delta[list[el[y].b] & (twopow-1)] = delta[list[el[x].b] & (twopow-1)] + el[x].v;
+    bcopy((int *)list1, (int *)list, (int)n * sizeof(*list));
 }
 
 static void goodhmrf(mode, u, n, list, b, r, rnk, beg, end, d, sym, rfm, ns)
@@ -522,11 +523,11 @@ static void goodhmrf(mode, u, n, list, b, r, rnk, beg, end, d, sym, rfm, ns)
      v[BMAX];
     unsigned int val[RMAX], delta[RMAX], b2, al, bt, gm, wk, wi, wj, w1,
      w2, w3;
-    unsigned char set[RMAX], pr;
+    unsigned int set[RMAX], pr;
     int l;
     long wl;
     struct {
-	unsigned char l, q, pr;
+	unsigned int l, q, pr;
 	unsigned int val[BMAX];
     } lev[RMAX];
 
@@ -552,8 +553,8 @@ static void goodhmrf(mode, u, n, list, b, r, rnk, beg, end, d, sym, rfm, ns)
 	for (i = 0; i < b; i++)
 	    lev[l].val[i] = (l) ? lev[l - 1].val[i] : 0;
 	for (j = BMAX, ls = lev[l].l, pr = lev[l].pr, x = 1;
-	     x && q < n; q++, x = y & 256) {
-	    set[ls] = x = (y = list[q]) & 255;
+	     x && q < n; q++, x = y & twopow) {
+	    set[ls] = x = (y = list[q]) & (twopow-1);
 	    if (u)
 		for (z = sym[x], k = 0; k < ls && set[k] != z; k++);
 	    if (!u || k == ls) {
@@ -562,7 +563,7 @@ static void goodhmrf(mode, u, n, list, b, r, rnk, beg, end, d, sym, rfm, ns)
 		if (j > k)
 		    j = k;
 	    } else
-		y = 256;
+		y = twopow;
 	}
 	if (x)
 	    q1 = n;
@@ -638,12 +639,12 @@ static int testsr(b, r, rnk, beg, end, d, sym, matr, rfm, lp,
     unsigned int b, r, *rnk, *beg, *end, *d, *matr, * rfm[],
      lp, *parts, ls, ns;
     int *sym;
-    unsigned char *subs;
+    unsigned int *subs;
 {
     unsigned int si, sj, sk, i, j, k, qi, qj, qk, s, s1, t, t1, x;
     unsigned int b2, al, bt, gm, ii, jj, kk, w1, w3;
     unsigned int *mi, *mi1, *mj, * mk, *mk1;
-    unsigned char *pi, *pj, *pk, *pi1, *pj1, *pk1, *epi, *epj, *epk;
+    unsigned int *pi, *pj, *pk, *pi1, *pj1, *pk1, *epi, *epj, *epk;
     long r2, w2;
 
     if (b == 1) {
@@ -763,7 +764,7 @@ static void ordsub(nsub)
     unsigned int nsub;
 {
     unsigned int i, j, im, *p;
-    unsigned char s;
+    unsigned int s;
 
     if(nsub > 0)      /* necessary because of `unsigned' */
       for (im = nsub - 1, i = 0; i < im; i++)
@@ -787,7 +788,7 @@ static void pr3(b, r, rnk, beg, end, d, sym, matr, rfm, parts, str)
     char *str;
 {
     unsigned int i, j, k, v1, la1, gm, bt, w2;
-    unsigned char *p, *p1, *p2, *ep;
+    unsigned int *p, *p1, *p2, *ep;
     long r2, w1;
     unsigned int n, v, la;
 
@@ -834,7 +835,7 @@ static void printsub(n, rs, lp, parts, b, r, rnk, beg, end, d, ref, sym, matr, r
     int *sym;
 {
     unsigned int i, q, sm, ls, lc, lb;
-    unsigned char *p, *p1, *ep;
+    unsigned int *p, *p1, *ep;
     char str[100];
 
     Sprintf(str, "%u. subscheme of rank %u ", n, rs);
@@ -892,7 +893,7 @@ static void outsub(lp, parts, b, ref, sym, ns)
     int *sym;
 {
     unsigned int i, q, sm, ls, lc, lb;
-    unsigned char *p, *p1, *ep;
+    unsigned int *p, *p1, *ep;
     char str[100];
 
     Sprintf(str, "");
@@ -936,7 +937,7 @@ static void subr(reg, mode, b, r, rnk, beg, end, d, ref, sym, matr, rfm, ns, na,
     int *sym;
 {
     unsigned int n, q, i, l, ls, x, nr, r1, lp, parts[RMAX];
-    unsigned char sc[RMAX], subs[RMAX], lev[RMAX], *p, *ep;
+    unsigned int sc[RMAX], subs[RMAX], lev[RMAX], *p, *ep;
 
     n = ns + na;
     for (i = 0; i < r; i++)

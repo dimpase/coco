@@ -12,3 +12,7 @@ bin directory $HOME/bin.
 
 Heiko Theissen contributed the representation of J2 on 10080
 points, constructed by Alexander Hulpke.
+
+Dima Pasechnik fixed a long-standing bug in the subscheme search
+reported in 1996 by Yuuji Suga and Akihiro Munemasa; the program produced
+incorrect subschemes of the rank 23 scheme of the cyclic group Z_23.
