@@ -44,7 +44,7 @@ crein: crein.o
 
 install: $(ALL)
 	cp $(ALL) ../bin
-	cp ../bin/coco $(HOME)/bin
+	cp ../bin/coco $(HOME)/bin/
 
 clean:
 	/bin/rm -f core *.o *~ $(ALL) coco.res
