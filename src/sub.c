@@ -13,7 +13,7 @@
 #include "common.h"
 #include "readstr.h"
 
-#define BMAX 100  /* max number of blocks (orbits in Schurean case) */
+#define BMAX 100  /* max number of blocks (orbits in Schurian case) */
 #define twopow 2048 
 #define RMAX twopow-1 /* maximal rank */
 #define NSMAX 20000

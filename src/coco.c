@@ -79,7 +79,7 @@ static void inpcom(str, na, arg)
     prt(3, "\nCOCO>> ");
     if (!fgets(str, NSTR, stdin)) {
       prt(3, "end of input\n");
-      exit(0);
+//      exit(0);
     }
     prt(2, "%s", str);
 
@@ -104,12 +104,12 @@ static void spawn(prog, arg) char *prog, *arg[];
     (void) fclose(fol);
     arg[0] = prog;
     if (!fork()) {
-      execv(prog, arg);
+      execvp(prog, arg);
       /* it failed - try another directory */
       if (*prog != '/' && coco != NULL) {
 	char buf[1000];
 	Sprintf(buf, "%s/bin/%s", coco, prog);
-	execv(buf,arg);
+	execvp(buf,arg);
       }
       Fprintf(stderr, "cannot exec %s : %s\n", prog, strerror(errno));
       exit(1);
@@ -173,18 +173,18 @@ int main(int na, char *pa[])
 	  spawn(list[i], arg);
 	}
 	else if (strcmp(str, "more") == 0)
-	  spawn("/usr/ucb/more", arg+1);
+	  spawn("more", arg+1);
 	else if (strcmp(str, "look") == 0) {
 	  if (narg > 1) {
 	    prt(3, "\nDo not use `look' with arguments");
 	    prt(3, " - use `more' instead\n");
 	  } else {
 	    arg[1] = lastof;
-	    spawn("/usr/ucb/more", arg);
+	    spawn("more", arg);
 	  }
 	}
 	else if (strcmp(str, "res") == 0)
-	  spawn("/usr/ucb/more", arg);
+	  spawn("more", arg);
 	else {
 	  if (strcmp(str, "new") == 0) {
 	    prt(3, "\nchange of file for output listing\n");
