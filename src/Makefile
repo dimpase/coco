@@ -43,8 +43,8 @@ crein: crein.o
 	$(CC) $(CFLAGS) -o crein crein.o -lm
 
 install: $(ALL)
-	cp $(ALL) ../bin
-	cp ../bin/coco $(HOME)/bin/
+	mv $(ALL) ../bin
+	mv ../bin/coco $(HOME)/bin/
 
 clean:
 	/bin/rm -f core *.o *~ $(ALL) coco.res
