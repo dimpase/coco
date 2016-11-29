@@ -1,14 +1,21 @@
+###############################################################
+# producing input to coco's sub.exe routine
+###############################################################
 #
-# constructing the multiplication coefficients (a.k.a. structure constants) file
-# for COCO from the character table of a group
-# 
-tabletonrs := function(t,f)
-   local M, n, i, j, k, p, nc;
-   n := Length(Irr(t));
-   PrintTo(f,"1\n",n,"\n\n");
+# the heavy lifting behind producing valid input to sub.exe
+#
+Btonrs := function(f,B,n,pairs)
+   local M, i, j, k, p, nc;
+   Print("\n n=", n, " pairs=", pairs);
+   PrintTo(f,"1\n",n,"\n");
+   if pairs=() then 
+       AppendTo(f,"\n");
+   else
+       AppendTo(f,pairs,"\n");
+   fi;
    nc := 0;
    for i in [1..n] do
-      M := MatClassMultCoeffsCharTable(t,i);
+      M := B(i);
       for j in [1..n] do 
          for k in [1..n] do 
            p := M[k][j];
@@ -19,7 +26,7 @@ tabletonrs := function(t,f)
 
    AppendTo(f,nc,"\n");
    for i in [1..n] do
-      M := MatClassMultCoeffsCharTable(t,i);
+      M := B(i);
       for j in [1..n] do 
          for k in [1..n] do 
            p := M[j][k];
@@ -33,6 +40,45 @@ tabletonrs := function(t,f)
               fi;
            fi;
    od; od; od;
-   AppendTo(f,"\n"); # to make the input readble by sub.exe directly
+   AppendTo(f,"\n"); # to make the input readable by sub.exe directly
+end;
+
+#
+# constructing the multiplication coefficients (a.k.a. structure constants) file
+# for COCO from the character table of a group
+# 
+tabletonrs := function(t,f)
+   local MC, n, i, p;
+   n := Length(Irr(t));
+   MC := function(i)
+      return MatClassMultCoeffsCharTable(t,i);
+   end;
+   p := PermList(List(InverseClasses(t){[2..n]},i->i-1));
+   Btonrs(f,MC,n,p);
+end;
+
+#
+# constructing the multiplication coefficients (a.k.a. structure constants) file
+# for COCO from the collapsed orbital matrices of a 
+# transitive permutation  group t
+# 
+LoadPackage("grape");
+coladjmatstonrs := function(t,f)
+   local MC, M, n, i, p, pairs;
+   M := OrbitalGraphColadjMats(t);
+   n := Length(M[1]);
+   MC := function(i)
+      return M[i]; 
+      #return TransposedMat(M[i]); 
+   end;
+   p:=[1..n];
+   for i in [1..n] do
+      if M[i][1][i]=0 then
+        Error("unexpected ordering!");
+      fi;
+      p[i]:=Position(TransposedMat(M[i])[1],1);
+   od;
+   pairs := PermList(List(p{[2..n]},i->i-1));
+   Btonrs(f,MC,n, pairs);
 end;
 
