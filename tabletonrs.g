@@ -82,3 +82,34 @@ coladjmatstonrs := function(t,f)
    Btonrs(f,MC,n, pairs);
 end;
 
+Gtogen := function(f,G,D)
+   local c, j, gg, ng, n, g, cc, lcc, lc;
+   gg := GeneratorsOfGroup(G);
+   ng := Length(gg);
+   n := Length(D);
+   PrintTo(f,n,"\n",ng,"\n");
+   
+   for g in gg do
+      cc := Cycles(g,D);
+      lcc := Length(cc);
+      for c in cc do
+         lcc := lcc - 1;
+         lc := Length(c);
+	 if lc>0 then
+	  AppendTo(f,"(");
+	  for j in c do
+	     AppendTo(f,j-1);
+             lc := lc - 1;
+	     if lc>0 then 
+	        AppendTo(f,",");
+	     fi;
+          od;
+	  AppendTo(f,")");
+	  if lcc>0 then 
+	     AppendTo(f,"*\n");
+          fi;
+	 fi;
+      od;
+      AppendTo(f,"\n");
+   od;
+end;
